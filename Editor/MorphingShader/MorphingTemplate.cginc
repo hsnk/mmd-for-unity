@@ -1,23 +1,43 @@
-﻿float GetReferenceFlag(sampler2D tex, float2 uv)
+﻿struct v2f {
+
+};
+
+float GetReferenceFlag(sampler2D tex, float2 uv)
 {
 	float4 color = tex2D(tex, uv);
 	return color.a;
 }
 
-float4 GetVerticesMap(sampler2D tex, float4 pos, int size)
+float2 GetReferenceUV(uint id)
 {
-	int number = pos.w;
-	int x = number % size;
-	int y = number / size;
-	float2 uv = float2((float)x / (float)size, (float)y / (float)size);
-
-	return tex2D(float2(u, v));
+	uint x = number % size;
+	uint y = number / size;
+	return float2((float)x / (float)size, (float)y / (float)size);
 }
 
-half GetX(float4 color)
+half4 GetVerticesMap(sampler2D tex, float2 uv)
 {
-	int r = int(color.r * 255);
-	int g = int(color.g * 255);
-	int rg = r + (g << 8);
+	return tex2D(tex, uv);
 }
 
+half GetAttribute(half2 packed)
+{
+	const half2 conversion = float2(1.0f, 1.0f / 256.0f);
+	return dot(packed, conversion);
+}
+
+float4 UnpackVector(half4 colors)
+{
+	half x = GetAttribute(half2(colors.xy));
+	half y = GetAttribute(half2(colors.zw));
+	half z = 1 - (sqrt(x * x + y * y));
+	// 1 = sqrt(x^2 + y^2 + z^2)
+	// 1 - sqrt(z^2) = sqrt(x^2 + y^2)
+	// sqrt(z^2) = 1 - sqrt(x^2 + y^2)
+	return float4(x*x, y*y, z*z, 1);	// 圧縮したときsqrtしている
+}
+
+// SV_VertexID(uint)で頂点番号を取得できる
+v2f vert(uint id : SV_VertexID, appdata_base) {
+
+}
