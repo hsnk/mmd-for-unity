@@ -43,3 +43,6 @@ float UnpackLength(half4 colors) {
 	return GetFloat(colors);
 }
 
+int GetIndex(float2 uv) {
+	return uv.x + uv.y * 1000000;
+}
