@@ -35,8 +35,6 @@ public class MorphingShaderBuilder
 		path = MakeExpressionPath(path);
 		var texture_pathes = new TexturePathes();
 
-		Debug.Log(path);
-
 		var base_texture = writer.BakeBaseTexture(expression.FindChild("base"));
 		var skinned_textures = writer.BakeSkinnedTextureFromExpression();
 
