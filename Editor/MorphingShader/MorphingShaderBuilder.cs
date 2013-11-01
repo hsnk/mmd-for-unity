@@ -71,7 +71,7 @@ public class MorphingShaderBuilder
 		new_str += splited[splited.Length - 2];
 		path = new_str;
 
-		if (Directory.Exists(path + "/Expression"))
+		if (!Directory.Exists(path + "/Expression"))
 			AssetDatabase.CreateFolder(path, "Expression");
 		return path + "/Expression";
 	}
