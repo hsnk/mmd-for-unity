@@ -26,7 +26,7 @@ public class MikunimCustomInspector : Editor {
 
 		if (window == null)
 		{
-			if (GUILayout.Button("Open Mikunim"))
+			if (GUILayout.Button("Open Mikunim Window"))
 			{
 				InitWindow();
 			}
