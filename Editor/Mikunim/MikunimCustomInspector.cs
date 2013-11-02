@@ -10,14 +10,11 @@ using System;
 public class MikunimCustomInspector : Editor {
 
 	MikunimWindow window = null;
-	SerializedObject serializedObject;
-	SerializedProperty states;
+	new SerializedObject serializedObject;
 	
-
 	void OnEnable()
 	{
 		serializedObject = new SerializedObject(target);
-		states = serializedObject.FindProperty("states");
 	}
 
 	public override void OnInspectorGUI()

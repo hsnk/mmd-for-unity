@@ -6,11 +6,35 @@ using UnityEditor;
 public class MikunimWindow : EditorWindow {
 
 	Dictionary<string, Node> nodes = new Dictionary<string, Node>();
+	bool is_selected_animation_clip = false;
+	AnimationClip[] selected_clips;
 
 	void OnGUI()
 	{
 		EditorGUI.DrawRect(GetRoundRectFromWindowBox(8), Color.black);
 		EditorGUI.DrawRect(GetRoundRectFromWindowBox(10), Color.gray);
+
+		DrawNodes();
+		ShowContextMenu();
+	}
+
+	// ノードの上にポインターが乗ってるかチェックする
+	bool CheckMousePointerOnNode()
+	{
+		foreach (var e in nodes)
+		{
+			if (e.Value.OnNode)
+				return true;
+		}
+		return false;
+	}
+
+	void DrawNodes()
+	{
+		foreach (var e in nodes)
+		{
+			e.Value.Draw();
+		}
 	}
 
 	Rect GetRoundRectFromWindowBox(float thickness)
@@ -26,7 +50,7 @@ public class MikunimWindow : EditorWindow {
 
 	void CreateNode(object obj)
 	{
-
+		
 	}
 
 	void ShowContextMenu()
@@ -35,5 +59,11 @@ public class MikunimWindow : EditorWindow {
 											new MouseDriver.MenuItem("Create Node", CreateNode, null)
 										};
 		MouseDriver.ShowContextMenu(items);
+	}
+
+	public void CatchCallbackForSelectionFlag(AnimationClip[] clips)
+	{
+		is_selected_animation_clip = true;
+		selected_clips = clips;
 	}
 }

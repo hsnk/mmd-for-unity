@@ -10,7 +10,7 @@ using UnityEngine;
 /// </summary>
 public class MouseDriver
 {
-	delegate void DrivenMethod();
+	public delegate void DrivenMethod();
 
 	static bool CheckMousePositionOnRect(ref Rect rect)
 	{
