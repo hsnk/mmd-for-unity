@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEditor;
 
 public class MikunimWindow : EditorWindow {
+
+	Dictionary<string, Node> nodes = new Dictionary<string, Node>();
 
 	void OnGUI()
 	{
@@ -19,5 +22,18 @@ public class MikunimWindow : EditorWindow {
 		var rect = new Rect(x, y, w, h);
 		rect.center = new Vector2(position.width * 0.5f, position.height * 0.5f);
 		return rect;
+	}
+
+	void CreateNode(object obj)
+	{
+
+	}
+
+	void ShowContextMenu()
+	{
+		MouseDriver.MenuItem[] items = {
+											new MouseDriver.MenuItem("Create Node", CreateNode, null)
+										};
+		MouseDriver.ShowContextMenu(items);
 	}
 }

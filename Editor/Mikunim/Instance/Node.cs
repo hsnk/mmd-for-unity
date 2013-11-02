@@ -11,6 +11,12 @@ public class Node : IDrawInterface
 
 	string title;
 	Rect rect;
+	bool remove_flag = false;
+	bool on_node_flag = false;
+
+	public bool OnNode { get { return on_node_flag; } }
+	public bool CanRemove { get { return remove_flag; } }
+	public string Title { get { return title; } }
 
 	public Node(Vector2 position, string title)
 	{
@@ -31,17 +37,6 @@ public class Node : IDrawInterface
 		prev_mouse_position = Input.mousePosition;
 	}
 
-	void CheckDrag()
-	{
-		if (Input.GetMouseButton(0) && CheckMousePositionOnRect())
-		{
-			// 四角形の中で左クリックされたら移動させる
-			var speed = Input.mousePosition - prev_mouse_position;
-			rect.x += speed.x;
-			rect.y += speed.y;
-		}
-	}
-
 	bool CheckMousePositionOnRect()
 	{
 		// マウスポインタと箱の当たり判定
@@ -56,32 +51,46 @@ public class Node : IDrawInterface
 		remove_flag = true;
 	}
 
-	void ShowContextMenu()
+	void PointerOnNode()
 	{
-		if (Input.GetMouseButton(1) && CheckMousePositionOnRect())
+		if (CheckMousePositionOnRect())
 		{
-			Event evt = Event.current;
-			if (evt.type == EventType.ContextClick)
+			on_node_flag = true;
+			if (Input.GetMouseButton(0))
 			{
-				if (OnNode)
-				{
-					GenericMenu menu = new GenericMenu();
-					menu.AddItem(new GUIContent("Remove"), false, RemoveNode, null);
-					menu.ShowAsContext();
-					evt.Use();
-				}
+				DragNode();
+			}
+			if (Input.GetMouseButton(1))
+			{
+				ShowContextMenu();
 			}
 		}
+		else
+		{
+			on_node_flag = false;
+		}
+	}
+
+	void DragNode()
+	{
+		// 四角形の中で左クリックされたら移動させる
+		var speed = Input.mousePosition - prev_mouse_position;
+		rect.x += speed.x;
+		rect.y += speed.y;
+	}
+
+	void ShowContextMenu()
+	{
+		MouseDriver.MenuItem[] menu = {
+										  new MouseDriver.MenuItem("Remove", RemoveNode, null)
+									  };
+		MouseDriver.ShowContextMenu(menu);
 	}
 
 	public void Draw()
 	{
-		CheckDrag();
 		EditorGUI.DrawRect(rect, Color.white);
+		GUI.Label(rect, title);
+		PointerOnNode();
 	}
-
-	bool remove_flag = false;
-
-	public bool OnNode { get { return CheckMousePositionOnRect(); } }
-	public bool IsRemove { get { return remove_flag; } }
 }
