@@ -58,6 +58,7 @@ public class Node : IDrawInterface
 	{
 		// 四角形の中で左クリックされたら移動させる
 		var speed = Event.current.mousePosition - prev_mouse_position;
+		Debug.Log(speed.ToString());
 		rect.x += speed.x;
 		rect.y += speed.y;
 	}

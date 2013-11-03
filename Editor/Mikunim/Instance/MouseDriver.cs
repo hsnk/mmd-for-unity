@@ -30,15 +30,8 @@ public class MouseDriver
 		{
 			on_node_flag = true;
 			Event e = Event.current;
-			if (e.button == 0)
-			{
-				Debug.Log("test");
-				left_click();
-			}
-			if (e.button == 1)
-			{
-				right_click();
-			}
+			if (e.button == 0) left_click();
+			if (e.button == 1) right_click();
 		}
 		return on_node_flag;
 	}
