@@ -32,7 +32,7 @@ public class CreateNodeWindow : EditorWindow
 			}
 		}
 
-		if (GUILayout.Button("Convert VMD Files"))
+		if (GUILayout.Button("Import"))
 		{
 			if (clips.Count > 0)
 				mikunim.CatchCallbackForCreateNodeFlag(clips);

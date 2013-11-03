@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using UnityEditor;
 using System;
 
-
-
 [CustomEditor(typeof(MikunimScript))]
 public class MikunimCustomInspector : Editor {
 
@@ -41,5 +39,6 @@ public class MikunimCustomInspector : Editor {
 		window_rect.width = 640;
 		window_rect.height = 480;
 		window.position = window_rect;
+		MouseDriver.mikunim = window;
 	}
 }

@@ -7,7 +7,7 @@ using UnityEditor;
 
 public class Node : IDrawInterface
 {
-	static Vector3 prev_mouse_position;
+	static Vector2 prev_mouse_position;
 
 	string title;
 	Rect rect;
@@ -36,16 +36,7 @@ public class Node : IDrawInterface
 
 	public static void UpdateMousePosition()
 	{
-		prev_mouse_position = Input.mousePosition;
-	}
-
-	bool CheckMousePositionOnRect()
-	{
-		// マウスポインタと箱の当たり判定
-		var pos = Input.mousePosition;
-		return
-			pos.x > rect.x && pos.x < rect.x + rect.width &&
-			pos.y > rect.y && pos.y < rect.y + rect.height;
+		prev_mouse_position = Event.current.mousePosition;
 	}
 
 	void RemoveNode(object obj)
@@ -55,18 +46,8 @@ public class Node : IDrawInterface
 
 	void PointerOnNode()
 	{
-		if (CheckMousePositionOnRect())
-		{
+		if (MouseDriver.PointerOnRect(ref rect, DragNode, ShowContextMenu))
 			on_node_flag = true;
-			if (Input.GetMouseButton(0))
-			{
-				DragNode();
-			}
-			if (Input.GetMouseButton(1))
-			{
-				ShowContextMenu();
-			}
-		}
 		else
 		{
 			on_node_flag = false;
@@ -76,7 +57,7 @@ public class Node : IDrawInterface
 	void DragNode()
 	{
 		// 四角形の中で左クリックされたら移動させる
-		var speed = Input.mousePosition - prev_mouse_position;
+		var speed = Event.current.mousePosition - prev_mouse_position;
 		rect.x += speed.x;
 		rect.y += speed.y;
 	}
@@ -91,9 +72,9 @@ public class Node : IDrawInterface
 
 	public void Draw()
 	{
-		EditorGUI.DrawRect(rect, Color.white);
-		GUI.Label(rect, title);
 		PointerOnNode();
 		UpdateMousePosition();
+		EditorGUI.DrawRect(rect, Color.white);
+		GUI.Label(rect, title);
 	}
 }

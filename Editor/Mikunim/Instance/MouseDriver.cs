@@ -12,13 +12,15 @@ public class MouseDriver
 {
 	public delegate void DrivenMethod();
 
+	public static MikunimWindow mikunim;
+
 	static bool CheckMousePositionOnRect(ref Rect rect)
 	{
 		// マウスポインタと箱の当たり判定
-		var pos = Input.mousePosition;
+		var pos = Event.current.mousePosition;
 		return
-			pos.x > rect.x && pos.x < rect.x + rect.width &&
-			pos.y > rect.y && pos.y < rect.y + rect.height;
+			pos.x > mikunim.position.x + rect.x && pos.x < mikunim.position.x + rect.x + rect.width &&
+			pos.y > mikunim.position.y + rect.y && pos.y < mikunim.position.y + rect.y + rect.height;
 	}
 
 	public static bool PointerOnRect(ref Rect rect, DrivenMethod left_click, DrivenMethod right_click)
@@ -27,11 +29,13 @@ public class MouseDriver
 		if (CheckMousePositionOnRect(ref rect))
 		{
 			on_node_flag = true;
-			if (Input.GetMouseButton(0))
+			Event e = Event.current;
+			if (e.button == 0)
 			{
+				Debug.Log("test");
 				left_click();
 			}
-			if (Input.GetMouseButton(1))
+			if (e.button == 1)
 			{
 				right_click();
 			}
