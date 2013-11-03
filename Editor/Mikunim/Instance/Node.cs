@@ -13,16 +13,18 @@ public class Node : IDrawInterface
 	Rect rect;
 	bool remove_flag = false;
 	bool on_node_flag = false;
+	AnimationClip clip;
 
 	public bool OnNode { get { return on_node_flag; } }
 	public bool CanRemove { get { return remove_flag; } }
 	public string Title { get { return title; } }
 
-	public Node(Vector2 position, string title)
+	public Node(Vector2 position, string title, AnimationClip clip)
 	{
 		this.title = title;
 		Vector2 size = MakeNodeSize();
 		rect = new Rect(position.x, position.y, size.x, size.y);
+		this.clip = clip;
 	}
 
 	Vector2 MakeNodeSize()
@@ -92,5 +94,6 @@ public class Node : IDrawInterface
 		EditorGUI.DrawRect(rect, Color.white);
 		GUI.Label(rect, title);
 		PointerOnNode();
+		UpdateMousePosition();
 	}
 }

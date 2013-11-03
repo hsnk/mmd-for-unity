@@ -6,8 +6,8 @@ using UnityEditor;
 public class MikunimWindow : EditorWindow {
 
 	Dictionary<string, Node> nodes = new Dictionary<string, Node>();
-	bool is_selected_animation_clip = false;
-	AnimationClip[] selected_clips;
+	bool do_create_node_flag = false;
+	Dictionary<string, AnimationClip> selected_clips;
 
 	void OnGUI()
 	{
@@ -16,6 +16,7 @@ public class MikunimWindow : EditorWindow {
 
 		DrawNodes();
 		ShowContextMenu();
+		CheckCreateNodeFlag();
 	}
 
 	// ノードの上にポインターが乗ってるかチェックする
@@ -37,6 +38,20 @@ public class MikunimWindow : EditorWindow {
 		}
 	}
 
+	void CheckCreateNodeFlag()
+	{
+		if (do_create_node_flag)
+		{
+			foreach (var e in selected_clips)
+			{
+				Node node = new Node(Input.mousePosition, e.Key, e.Value);
+				nodes.Add(e.Key, node);
+			}
+			do_create_node_flag = false;
+			this.Repaint();
+		}
+	}
+
 	Rect GetRoundRectFromWindowBox(float thickness)
 	{
 		float x = thickness;
@@ -48,22 +63,24 @@ public class MikunimWindow : EditorWindow {
 		return rect;
 	}
 
-	void CreateNode(object obj)
+	CreateNodeWindow create_window;
+	void CallCreateNodeWindow(object obj)
 	{
-		
+		create_window = GetWindow<CreateNodeWindow>();
+		create_window.mikunim = this;
 	}
 
 	void ShowContextMenu()
 	{
 		MouseDriver.MenuItem[] items = {
-											new MouseDriver.MenuItem("Create Node", CreateNode, null)
+											new MouseDriver.MenuItem("Create Node", CallCreateNodeWindow, null)
 										};
 		MouseDriver.ShowContextMenu(items);
 	}
 
-	public void CatchCallbackForSelectionFlag(AnimationClip[] clips)
+	public void CatchCallbackForCreateNodeFlag(Dictionary<string, AnimationClip> clips)
 	{
-		is_selected_animation_clip = true;
+		do_create_node_flag = true;
 		selected_clips = clips;
 	}
 }

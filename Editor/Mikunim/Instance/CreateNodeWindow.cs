@@ -9,19 +9,17 @@ public class CreateNodeWindow : EditorWindow
 {
 	public MikunimWindow mikunim;
 	UnityEngine.Object[] objects;
-	List<AnimationClip> clips = new List<AnimationClip>();
+	Dictionary<string, AnimationClip> clips = new Dictionary<string, AnimationClip>();
 
 	void OnGUI()
 	{
-
-
 		GUILayout.Label("Select Animation Clip");
 
 		// 毎フレーム初期化する
 		objects = Selection.objects;
 		if (objects.Length > 0)
 		{
-			clips = new List<AnimationClip>();
+			clips = new Dictionary<string, AnimationClip>();
 
 			foreach (var obj in objects)
 			{
@@ -29,7 +27,7 @@ public class CreateNodeWindow : EditorWindow
 				if (asset != null)
 				{
 					// AnimationClipに変換できる
-					clips.Add(asset);
+					clips.Add(asset.name, asset);
 				}
 			}
 		}
@@ -37,7 +35,7 @@ public class CreateNodeWindow : EditorWindow
 		if (GUILayout.Button("Convert VMD Files"))
 		{
 			if (clips.Count > 0)
-				mikunim.CatchCallbackForSelectionFlag(clips.ToArray());
+				mikunim.CatchCallbackForCreateNodeFlag(clips);
 		}
 	}
 }
