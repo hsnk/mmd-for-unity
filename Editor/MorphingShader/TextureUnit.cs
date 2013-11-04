@@ -8,11 +8,11 @@ using System.IO;
 
 public class TextureUnit
 {
-	public int Size { get; private set; }
-
 	Texture2D texture;
 	int vertices_count;
-	int counter = 0;
+
+	public int Size { get; private set; }
+	public Texture2D Texture { get { return texture; } }
 
 	public TextureUnit(int vertices_count)
 	{
@@ -38,32 +38,30 @@ public class TextureUnit
 public class TexturePack
 {
 	string name;
-	int vertices_count;
-	TextureUnit x;
-	TextureUnit y;
-	TextureUnit length;
+	public TextureUnit X { get; private set; }
+	public TextureUnit Y { get; private set; }
+	public TextureUnit Length { get; private set; }
 
 	public TexturePack(string name, int vertices_count)
 	{
 		this.name = name;
-		this.vertices_count = vertices_count;
-		x = new TextureUnit(vertices_count);
-		y = new TextureUnit(vertices_count);
-		length = new TextureUnit(vertices_count);
+		X = new TextureUnit(vertices_count);
+		Y = new TextureUnit(vertices_count);
+		Length = new TextureUnit(vertices_count);
 	}
 
 	public void SetColors(Color[] x, Color[] y, Color[] length)
 	{
-		this.x.Set(x);
-		this.y.Set(y);
-		this.length.Set(length);
+		this.X.Set(x);
+		this.Y.Set(y);
+		this.Length.Set(length);
 	}
 
-	public void Save(string animation_path)
+	public void Save(string expression_path)
 	{
-		animation_path += "/" + name;
-		x.Save(animation_path + "_x.png");
-		y.Save(animation_path + "_y.png");
-		length.Save(animation_path + "_length.png");
+		expression_path += "/" + name;
+		X.Save(expression_path + "_x.png");
+		Y.Save(expression_path + "_y.png");
+		Length.Save(expression_path + "_length.png");
 	}
 }
