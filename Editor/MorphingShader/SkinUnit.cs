@@ -91,31 +91,18 @@ public class BaseUnit : AbstractSkinUnit
 
 	public Color[] ConvertColors()
 	{
-		Color[] argb = new Color[square_size * square_size];
+		int size = square_size * square_size;
+		Color[] argb = new Color[size];
 
+		int count = 0;
+		for (int i = 0; i < size; i++)
+		{
+			if (base_indices[count] == i)
+				argb[base_indices[count++]] = new Color(1, 1, 1, 1);
+			else
+				argb[i] = new Color(0, 0, 0, 0);
+		}
 		return argb;
 	}
 }
 
-public class TextureConverter
-{
-	int[] base_indices;
-	int vertices_count;
-	int square_size;
-	List<SkinUnit> packs = new List<SkinUnit>();
-
-	public TextureConverter(int vertices_count, int[] base_indices)
-	{
-		this.vertices_count = vertices_count;
-		this.base_indices = base_indices;
-		this.square_size = MorphUtil.SquareSize(vertices_count);
-	}
-
-	public void AddSkin(string name, int[] target_indices, Vector3[] vectors)
-	{
-		SkinUnit pack = new SkinUnit(name, square_size, base_indices, target_indices, vectors);
-		packs.Add(pack);
-	}
-
-	
-}
