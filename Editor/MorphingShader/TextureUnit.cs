@@ -9,8 +9,8 @@ using System.IO;
 public class TextureUnit
 {
 	public int Size { get; private set; }
+
 	Texture2D texture;
-	Color[] pixels;
 	int vertices_count;
 	int counter = 0;
 
@@ -18,7 +18,6 @@ public class TextureUnit
 	{
 		this.Size = MorphUtil.SquareSize(vertices_count);
 		this.texture = new Texture2D(Size, Size, TextureFormat.RGBA32, false);
-		this.pixels = this.texture.GetPixels();
 		this.vertices_count = vertices_count;
 	}
 
@@ -28,21 +27,43 @@ public class TextureUnit
 		File.WriteAllBytes(path, bytes);
 	}
 
-	/// <summary>
-	/// 値を入れていく．
-	/// カウンターが自動的に回ってるのでwhile(Set(array[i++]))でいい．
-	/// </summary>
-	/// <param name="value">入れたい数値</param>
-	/// <returns>値域がsize^2より小さければtrue</returns>
-	public bool Set(float value)
+	public void Set(Color[] pixels)
 	{
-		if (counter < vertices_count)
-		{
-			pixels[counter] = FloatConverter.Encode32(value);
-			counter++;
-			return true;
-		}
-		return false;
+		if (vertices_count != pixels.Length)
+			throw new IndexOutOfRangeException("与えられたpixels.Lengthとvertices_countの数値がなぜか合ってない");
+		texture.SetPixels(pixels);
 	}
 }
 
+public class TexturePack
+{
+	string name;
+	int vertices_count;
+	TextureUnit x;
+	TextureUnit y;
+	TextureUnit length;
+
+	public TexturePack(string name, int vertices_count)
+	{
+		this.name = name;
+		this.vertices_count = vertices_count;
+		x = new TextureUnit(vertices_count);
+		y = new TextureUnit(vertices_count);
+		length = new TextureUnit(vertices_count);
+	}
+
+	public void SetColors(Color[] x, Color[] y, Color[] length)
+	{
+		this.x.Set(x);
+		this.y.Set(y);
+		this.length.Set(length);
+	}
+
+	public void Save(string animation_path)
+	{
+		animation_path += "/" + name;
+		x.Save(animation_path + "_x.png");
+		y.Save(animation_path + "_y.png");
+		length.Save(animation_path + "_length.png");
+	}
+}
