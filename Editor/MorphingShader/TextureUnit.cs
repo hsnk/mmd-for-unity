@@ -11,15 +11,15 @@ public class TextureUnit
 	public int Size { get; private set; }
 	Texture2D texture;
 	Color[] pixels;
-	int size2;
+	int vertices_count;
 	int counter = 0;
 
-	public TextureUnit(int size)
+	public TextureUnit(int vertices_count)
 	{
-		this.Size = size;
-		this.texture = new Texture2D(size, size, TextureFormat.RGBA32, false);
+		this.Size = MorphUtil.SquareSize(vertices_count);
+		this.texture = new Texture2D(Size, Size, TextureFormat.RGBA32, false);
 		this.pixels = this.texture.GetPixels();
-		this.size2 = Size * Size;
+		this.vertices_count = vertices_count;
 	}
 
 	public void Save(string path)
@@ -36,7 +36,7 @@ public class TextureUnit
 	/// <returns>値域がsize^2より小さければtrue</returns>
 	public bool Set(float value)
 	{
-		if (counter < size2)
+		if (counter < vertices_count)
 		{
 			pixels[counter] = FloatConverter.Encode32(value);
 			counter++;
