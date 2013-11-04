@@ -4,14 +4,15 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class TextureConverter
+public class TextureFactory
 {
 	int[] base_indices;
 	int vertices_count;
 	int square_size;
-	List<SkinUnit> packs = new List<SkinUnit>();
+	List<SkinUnit> skins = new List<SkinUnit>();
+	List<TexturePack> textures = new List<TexturePack>();
 
-	public TextureConverter(int vertices_count, int[] base_indices)
+	public TextureFactory(int vertices_count, int[] base_indices)
 	{
 		this.vertices_count = vertices_count;
 		this.base_indices = base_indices;
@@ -20,8 +21,11 @@ public class TextureConverter
 
 	public void AddSkin(string name, int[] target_indices, Vector3[] vectors)
 	{
-		SkinUnit pack = new SkinUnit(name, square_size, base_indices, target_indices, vectors);
-		packs.Add(pack);
+		SkinUnit skin = new SkinUnit(name, square_size, base_indices, target_indices, vectors);
+		TexturePack pack = new TexturePack(name, square_size * square_size);
+
+		skins.Add(skin);
+		
 	}
 
 
