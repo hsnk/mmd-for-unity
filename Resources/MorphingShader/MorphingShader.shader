@@ -5,7 +5,7 @@
         _X1 ("name X", 2D) = "black" {}
         _Y1 ("name Y", 2D) = "black" {}
         _L1 ("name Length", 2D) = "black" {}
-        _W1 ("name Weight", Range(0, 0)) = 0
+        _W1 ("name Weight", Range(0, 1)) = 0
     }
 
     SubShader {
@@ -13,6 +13,8 @@
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
+            #pragma target 3.0
+            #pragma glsl
             #include "UnityCG.cginc"
 
             // 宣言 //////////////////////////////////
@@ -74,12 +76,17 @@
                 return float4(xxx, yyy, sqrt(zzz), 0) * len;
             }
 
-            v2f vert(appdata_full v) {
-                v2f o;
+            inline float4 MixingDirection() {
                 int id = ColorToInt(v.color);
                 int size = (int)_TextureSize;
+                float4 _uv = IndexToUV(id, size);
 
+                return GetDirection(_X1, _Y1, _L1, _uv) * _W1;
+            }
 
+            v2f vert(appdata_full v) {
+                v2f o;
+                v.vertex += MixingDirection();
                 o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
                 return o;
             }
