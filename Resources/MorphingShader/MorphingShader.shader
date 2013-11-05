@@ -52,9 +52,9 @@
 
             // 頂点インデックスからテクスチャを参照するUV座標を取得する
             inline float4 IndexToUV(int id, int size) {
-                float u = (id % size) / size;
-                float v = (id / size) / size;
-                return float4(u, v, 0, 0);
+                float uu = (id % size) / size;
+                float vv = (id / size) / size;
+                return float4(uu, vv, 0, 0);
             }
 
             // テクスチャを参照してUnpackされたデータを取り出す
@@ -62,7 +62,7 @@
                 float4 rgba = tex2Dlod(_texture, uv);
                 return UnpackFloat4(rgba);
             }
-
+            
             // sqrt(x^2 + y^2 + z^2) = 1
             // x^2 + y^2 + z^2 = 1
             // x^2 + y^2 = 1 - z^2
@@ -75,18 +75,19 @@
                 float len = GetData(_len, _uv);
                 return float4(xxx, yyy, sqrt(zzz), 0) * len;
             }
-
-            inline float4 MixingDirection() {
+            
+            inline float4 MixingDirection(appdata_full v) {
                 int id = ColorToInt(v.color);
                 int size = (int)_TextureSize;
                 float4 _uv = IndexToUV(id, size);
 
                 return GetDirection(_X1, _Y1, _L1, _uv) * _W1;
             }
-
+            
+            
             v2f vert(appdata_full v) {
                 v2f o;
-                v.vertex += MixingDirection();
+                v.vertex += MixingDirection(v);
                 o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
                 return o;
             }
