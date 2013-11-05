@@ -6,6 +6,20 @@ using System.Text;
 using UnityEngine;
 using UnityEditor;
 
+public class SkinPack
+{
+	public SkinUnit Skin { get; private set; }
+	public TexturePack TexturePack { get; private set; }
+	public string Name { get; private set; }
+
+	public SkinPack(string name, SkinUnit skin, TexturePack texture)
+	{
+		this.Skin = skin;
+		this.TexturePack = texture;
+		Name = name;
+	}
+}
+
 public class TextureFactory
 {
 	int[] base_indices;
@@ -15,18 +29,6 @@ public class TextureFactory
 
 	BaseUnit base_unit;
 	TextureUnit base_texture;
-
-	public class SkinPack
-	{
-		public SkinUnit Skin { get; private set; }
-		public TexturePack TexturePack { get; private set; }
-
-		public SkinPack(SkinUnit skin, TexturePack texture)
-		{
-			this.Skin = skin;
-			this.TexturePack = texture;
-		}
-	}
 
 	public TextureFactory(int vertices_count, int[] base_indices)
 	{
@@ -48,7 +50,7 @@ public class TextureFactory
 	{
 		SkinUnit skin = new SkinUnit(name, square_size, base_indices, target_indices, vectors);
 		TexturePack pack = new TexturePack(name, square_size * square_size);
-		SkinPack sknpck = new SkinPack(skin, pack);
+		SkinPack sknpck = new SkinPack(name, skin, pack);
 		ColoringTexture(sknpck);
 	}
 
