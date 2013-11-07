@@ -16,7 +16,7 @@
             #pragma target 3.0
             #pragma glsl
             #include "UnityCG.cginc"
-
+            
             // 宣言 //////////////////////////////////
             sampler2D _MainTex;
             float _TextureSize;
@@ -25,6 +25,7 @@
             sampler2D _L1;
             float _W1;
             //////////////////////////////////////////
+
 
             struct v2f {
                 float4 pos : SV_POSITION;
@@ -83,9 +84,8 @@
 
                 return GetDirection(_X1, _Y1, _L1, _uv) * _W1;
             }
-            
-            
-            v2f vert(appdata_full v) {
+
+			v2f vert(appdata_full v) {
                 v2f o;
                 v.vertex += MixingDirection(v);
                 o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
@@ -95,6 +95,7 @@
             half4 frag (v2f i) : COLOR {
                 return half4(i.color, 1);
             }
+
             ENDCG
         }
     }
