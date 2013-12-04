@@ -7,22 +7,27 @@ public class VMDLoaderWindow : EditorWindow {
 	GameObject pmdPrefab;
 	bool createAnimationFile;
 	int interpolationQuality;
+	static Config config;
 
 	[MenuItem ("Plugins/MMD Loader/VMD Loader")]
 	static void Init() {
 		var window = (VMDLoaderWindow)EditorWindow.GetWindow<VMDLoaderWindow>(true, "VMDLoader");
 		window.Show();
+
+		// デフォルトコンフィグ
+		config = Config.LoadAndCreate();
 	}
 	
     public VMDLoaderWindow()
     {
-        // デフォルトコンフィグ
-        var config = MMD.Config.LoadAndCreate();
-        createAnimationFile = config.vmd_config.createAnimationFile;
-        interpolationQuality = config.vmd_config.interpolationQuality;
     }
 
     void OnGUI() {
+    	///
+    	createAnimationFile = config.vmd_config.createAnimationFile;
+        interpolationQuality = config.vmd_config.interpolationQuality;
+        ///
+
 		const int height = 20;
 		int top = 0;
 		

@@ -12,25 +12,30 @@ public class PMDLoaderWindow : EditorWindow {
 	bool use_ik = true;
 	float scale = 0.085f;
 	bool is_pmx_base_import = false;
+	static Config config;
 
 	[MenuItem("Plugins/MMD Loader/PMD Loader")]
 	static void Init() {        
         var window = (PMDLoaderWindow)EditorWindow.GetWindow<PMDLoaderWindow>(true, "PMDLoader");
 		window.Show();
+
+		// デフォルトコンフィグ
+		config = Config.LoadAndCreate();
 	}
 
     public PMDLoaderWindow()
     {
-        // デフォルトコンフィグ
-		var config = MMD.Config.LoadAndCreate();
+    }
+	
+	void OnGUI() {
+		///
 		shader_type = config.pmd_config.shader_type;
 		rigidFlag = config.pmd_config.rigidFlag;
 		use_mecanim = config.pmd_config.use_mecanim;
 		use_ik = config.pmd_config.use_ik;
 		is_pmx_base_import = config.pmd_config.is_pmx_base_import;
-    }
-	
-	void OnGUI() {
+		///
+
 		pmdFile = EditorGUILayout.ObjectField("PMD File" , pmdFile, typeof(Object));
 		
 		// シェーダの種類

@@ -98,7 +98,7 @@ namespace MMD
 
 			return root_game_object_;
 		}
-		
+
 		/// <summary>
 		/// メッシュを作成する時に参照するデータの纏め
 		/// </summary>
@@ -1120,14 +1120,27 @@ namespace MMD
 				smr.sharedMesh = mesh[i];
 				smr.bones = bones_transform;
 				smr.materials = materials[i];
-				smr.rootBone = model_root_transform;
+				// smr.rootBone = model_root_transform;
+				setRootBone(smr, model_root_transform);
 				smr.receiveShadows = false; //影を受けない
 				
 				result[i] = smr;
 			}
 			return result;
 		}
-		
+
+		void setRootBone(SkinnedMeshRenderer smr, Transform rootBone) {
+			Transform root = smr.bones[0];
+			int rootIndex = 0;
+			for(int i = 1; i < smr.bones.Length; i++) {
+			    if (root.IsChildOf(smr.bones[i])) {
+			        root = smr.bones[i];
+			        rootIndex = i;
+			    }
+			}
+			smr.bones[rootIndex] = rootBone;
+		}
+
 		/// <summary>
 		/// IK作成
 		/// </summary>
